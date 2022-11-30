@@ -1,0 +1,29 @@
+name: ${name}
+version: ${version}
+main: ${mainClass}
+api-version: 1.18
+authors: [SecretX]
+description: Add a command for players to get infinite firework
+website: https://github.com/SecretX33
+
+commands:
+  fireworkinfinitum:
+    description: ${name}
+    usage: /<command> <player>
+    aliases: [fwi, fi]
+    permission: fireworkinfinitum.command
+
+  fireworkinfinitumreload:
+    description: ${name}
+    usage: /<command>
+    aliases: [fwir, fir]
+    permission: fireworkinfinitum.command
+
+permissions:
+  fireworkinfinitum.command:
+    description: Makes the player able to use all plugin commands
+    default: op
+
+  fireworkinfinitum.bypass.cooldown:
+    description: Makes the player bypass the firework cooldown
+    default: op

@@ -1,0 +1,22 @@
+# SaveCoords
+
+# The interval between two firework usages, in seconds
+firework-cooldown-in-seconds: 1.0
+
+# The configurations of the firework given to the players, can be used to set its name and effects
+firework:
+  "material": "FIREWORK_ROCKET"         # do not change this
+  "name": "§9Firework §dRocket"         # set a display name here
+  "power": 1                            # each level of power is half a second of flight time
+  "firework":
+    "0":
+      "type": "BALL_LARGE"              # BALL, BALL_LARGE, BURST, CREEPER, STAR
+      "flicker": true
+      "trail": true
+      "colors":                         # firework colors, each line represents one color that is added to the firework
+        "base":
+          - "0, 255, 255"               # RGB colors
+          - "255, 0, 0"                 # RGB colors
+        "fade":
+          - "128, 0, 128"               # RGB colors
+          - "128, 128, 128"             # RGB colors
