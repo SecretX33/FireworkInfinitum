@@ -4,14 +4,14 @@ plugins {
 }
 
 group = "com.github.secretx33"
-version = "1.0-SNAPSHOT"
-
-val javaVersion = 17
+version = "1.0.1"
 
 repositories {
     mavenCentral()
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
 }
+
+val javaVersion = 17
 
 dependencies {
     compileOnly("org.spigotmc:spigot-api:1.18.2-R0.1-SNAPSHOT")
