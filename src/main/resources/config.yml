@@ -3,6 +3,10 @@
 # The interval between two firework usages, in seconds
 firework-cooldown-in-seconds: 1.0
 
+# Message that will be sent when the player tries to use a Firework that is on cooldown.The placeholder for cooldown is %seconds%
+# Leave the message empty or comment the config key to disable this feature
+firework-cooldown-message: "&7Firework is on cooldown, please await %seconds%s to use it again"
+
 # The configurations of the firework given to the players, can be used to set its name and effects
 firework:
   "material": "FIREWORK_ROCKET"         # do not change this

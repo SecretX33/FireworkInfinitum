@@ -25,10 +25,12 @@ public class FireworkListener implements Listener {
 
         if (fireworkManager.isPlayerFireworkOnCooldown(player)) {
             // Infinite firework is on cooldown, prevent its usage and return
+            fireworkManager.notifyFireworkCooldown(player);
             event.setCancelled(true);
             return;
         }
 
+        // If the player is not immune to cooldown, set his Firework on cooldown
         if (!fireworkManager.hasFireworkCooldownBypass(player)) {
             fireworkManager.setPlayerFireworkOnCooldown(player);
         }

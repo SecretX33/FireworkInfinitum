@@ -29,9 +29,10 @@ public class ReloadCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
+        plugin.saveDefaultConfig();
         plugin.reloadConfig();
         fireworkManager.reload();
-        sender.sendMessage(ChatColor.GREEN + "[FireworkInfinitum] Reloaded plugin configs");
+        sender.sendMessage(ChatColor.GREEN + "Reloaded plugin configs");
         return true;
     }
 

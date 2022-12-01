@@ -3,6 +3,7 @@ package com.github.secretx33.fireworkinfinitum.manager;
 import com.cryptomorin.xseries.XItemStack;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
@@ -13,18 +14,20 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.util.UUID;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.lang.Math.max;
 
 public class FireworkManager {
 
-    private static final Boolean PRESENT = Boolean.TRUE;
     private static final PersistentDataType<Byte, Byte> INFINITE_FIREWORK_PDC_TYPE = PersistentDataType.BYTE;
 
     private final Plugin plugin;
     private final NamespacedKey infiniteFireworkKey;
-    private Cache<UUID, Boolean> fireworkCooldownCache;
+    private Cache<UUID, Instant> fireworkCooldownCache;
+    private Duration cooldown;
 
     public FireworkManager(Plugin plugin) {
         this.plugin = plugin;
@@ -33,7 +36,7 @@ public class FireworkManager {
     }
 
     public void reload() {
-        var cooldown = Duration.ofMillis(Math.round(plugin.getConfig().getDouble("firework-cooldown-in-seconds") * 1000));
+        cooldown = Duration.ofMillis(Math.round(plugin.getConfig().getDouble("firework-cooldown-in-seconds") * 1000));
         fireworkCooldownCache = CacheBuilder.newBuilder()
             .expireAfterWrite(cooldown)
             .build();
@@ -70,11 +73,11 @@ public class FireworkManager {
     }
 
     public boolean isPlayerFireworkOnCooldown(Player player) {
-        return fireworkCooldownCache.getIfPresent(player.getUniqueId()) == PRESENT;
+        return fireworkCooldownCache.getIfPresent(player.getUniqueId()) != null;
     }
 
     public void setPlayerFireworkOnCooldown(Player player) {
-        fireworkCooldownCache.put(player.getUniqueId(), PRESENT);
+        fireworkCooldownCache.put(player.getUniqueId(), Instant.now().plus(cooldown));
     }
 
     public boolean canUseCommands(CommandSender sender) {
@@ -83,5 +86,18 @@ public class FireworkManager {
 
     public boolean hasFireworkCooldownBypass(Player player) {
         return player.hasPermission("fireworkinfinitum.bypass.cooldown");
+    }
+
+    public void notifyFireworkCooldown(Player player) {
+        var message = plugin.getConfig().getString("firework-cooldown-message", "");
+        if (message.isBlank()) return;
+
+        var now = Instant.now();
+        var cooldownExpiration = fireworkCooldownCache.getIfPresent(player.getUniqueId());
+        if (cooldownExpiration == null) cooldownExpiration = now;
+
+        var secondsLeft = max(1, cooldownExpiration.getEpochSecond() - now.getEpochSecond());
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&', message)
+            .replace("%seconds%", String.valueOf(secondsLeft)));
     }
 }
